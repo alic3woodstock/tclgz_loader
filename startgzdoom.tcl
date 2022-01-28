@@ -5,8 +5,10 @@ package require awdark
 package require Tk
 package require platform
 
+#configure style
 ttk::style theme use awdark
 . configure -background [::ttk::style lookup TFrame -background]
+font configure TkDefaultFont -size 14
 
 global variable arrayGames
 global variable arrayMaps
@@ -71,7 +73,15 @@ proc readCSV {} {
 #    puts $listGames
 }
 
-font configure TkDefaultFont -size 14
+proc getSelectedIndex {vListBox} {
+    for {set i 0} {$i < [$vListBox size]} {incr i} {
+        if {[$vListBox get active] == [$vListBox get $i]} {
+            return $i
+        }
+    }
+
+    return 0
+}
 
 proc main {args} {
 
@@ -84,8 +94,16 @@ proc main {args} {
     ttk::frame .frmStart
     ttk::frame .frmMap
     ttk::frame .frmButtons
-    listbox .lstStart -activestyle dotbox -selectmode single -width 38 -heigh [array size arrayGames]
-    listbox .lstMap  -activestyle dotbox -selectmode single -width 38 -heigh [array size arrayMaps]
+
+    set listSize 1
+    if {[array size arrayGames] >= [array size arrayMaps]} {
+        set listSize [array size arrayGames]
+    } else {
+        set listSize [array size arrayMaps]
+    }
+
+    listbox .lstStart -activestyle dotbox -selectmode single -width 38 -heigh $listSize
+    listbox .lstMap  -activestyle dotbox -selectmode single -width 38 -heigh $listSize
     ttk::button .btnRun -text "OK" -command "event generate . <Return>"
     ttk::button .btnCancel -text "Cancel" -command "event generate . <Escape>"
 
@@ -100,7 +118,16 @@ proc main {args} {
 
     readCSV
 
-    #move the window to the center of the screen
+    set currentList ".lstStart"
+    .lstStart activate 0
+    .lstStart selection set 0
+
+    bind . <Return> {
+        #line for test purposes
+        puts [getSelectedIndex ".lstStart"]
+    }
+
+    #move the window to the center of the screen, not working as intended I need to correct
     update
     set wHeight [expr 1920 / 2 - [winfo height .] / 2]
     set wWidth [expr 1080 / 2 - [winfo width .] / 2]

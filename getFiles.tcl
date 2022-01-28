@@ -32,8 +32,8 @@ proc genCSV {} {
         puts $csvGames "4,Brutal Doom,mod,mods/brutalv21.11.2.pk3"
         puts $csvGames "#maps"
         puts $csvGames "#id,name,type,mod suport,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvGames "1,Eviternity,map,true,gzdoom.cfg,freedoom1.wad,maps/Eviternity.wad"
-        puts $csvGames "1,Memento Mori,map,true,gzdoom.cfg,freedoom1.wad,maps/MM.wad,MMMUS.WAD"
+        puts $csvGames "1,Eviternity,map,true,gzdoom.cfg,freedoom2.wad,maps/Eviternity.wad"
+        puts $csvGames "1,Memento Mori,map,true,gzdoom.cfg,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
         close $csvGames
     }
 }

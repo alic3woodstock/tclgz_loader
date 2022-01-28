@@ -19,13 +19,16 @@ proc main {} {
     set deleteList ""
     for {set i 0} {$i < [llength $lFiles]} {incr i} {
       set strTemp [lindex $lFiles $i]
+
+      #preserve source code
       if {[string first ".tcl" $strTemp] >= 0} {
         set strTemp ""
       }
+
+      #preserve essential third party files
       if {[string first "awthemes" $strTemp] >= 0} {
         set strTemp ""
       }
-
       if {[string first ".cfg" $strTemp] >=0} {
         set strTemp ""
       }
@@ -35,6 +38,12 @@ proc main {} {
       if {[string first "7z" $strTemp] >=0} {
         set strTemp ""
       }
+
+      #preserve dowloads since it's on .gitignore
+      if {[string first "downloads" $strTemp] >=0} {
+        set strTemp ""
+      }
+
 
       if {$strTemp != ""} {
         lappend deleteList $strTemp
