@@ -118,13 +118,17 @@ proc main {args} {
 
     readCSV
 
-    set currentList ".lstStart"
     .lstStart activate 0
-    .lstStart selection set 0
-
+    .lstStart selection set 0   
+    
+    bind . <<startApp>> {
+        set currentList ".lstStart"
+    }       
+    event generate . <<startApp>>
+    
     bind . <Return> {
         #line for test purposes
-        puts [getSelectedIndex ".lstStart"]
+        puts [getSelectedIndex $currentList]
     }
 
     #move the window to the center of the screen, not working as intended I need to correct
