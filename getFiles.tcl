@@ -38,16 +38,10 @@ proc genCSV {} {
     }
 }
 
-proc main {} {
-    if {[string first "win" [platform::generic]] >= 0} {
-    } else {
-        set sevenzip "./7zzs"
+proc downloadFiles {} {
         set wget "./wget"
-
-        #install gzdoom
-        exec rm -Rf temp
-
-        exec mkdir -p downloads
+        file delete -force temp
+        file mkdir downloads
 
         #gzdoom
         exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom_4.7.1_amd64.deb -P downloads
@@ -69,9 +63,18 @@ proc main {} {
         #maps
         exec -ignorestderr $wget -c https://www.quaddicted.com/files/idgames/levels/doom2/Ports/megawads/eviternity.zip -P downloads
         exec -ignorestderr $wget -c https://www.quaddicted.com/files/idgames/themes/mm/mm_allup.zip -P downloads
-        exec -ignorestderr $wget -c https://www.quaddicted.com/files/idgames/themes/mm/mm2.zip -P downloads
+        exec -ignorestderr $wget -c https://www.quaddicted.com/files/idgames/themes/mm/mm2.zip -P downloads        
+}
 
-        exec mkdir -p temp
+proc main {} {
+    if {[string first "win" [platform::generic]] >= 0} {
+    } else {
+        set sevenzip "./7zzs"
+        set wget "./wget"
+        
+        downloadFiles
+
+        file mkdir temp
 
         puts "extractiong gzdoom..."
         exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
@@ -86,7 +89,7 @@ proc main {} {
         }
 
         puts "extractiong wads..."
-        exec mkdir -p wad
+        file mkdir wad
         exec -ignorestderr $sevenzip x -slp downloads/blasphem-0.1.7.zip -otemp
         exec -ignorestderr $sevenzip x -slp downloads/blasphemer-texture-pack.zip -otemp
         exec -ignorestderr $sevenzip x -slp downloads/freedoom-0.12.1.zip -otemp
@@ -97,7 +100,7 @@ proc main {} {
         exec mv ./temp/freedoom-0.12.1/freedoom2.wad ./wad
 
         puts "extractiong maps..."
-        exec mkdir -p maps
+        file mkdir maps
         exec -ignorestderr $sevenzip x -slp downloads/eviternity.zip -otemp
         exec -ignorestderr $sevenzip x -slp downloads/mm_allup.zip -otemp
 #         exec -ignorestderr $sevenzip x -slp downloads/mm2.zip -otemp
@@ -107,7 +110,7 @@ proc main {} {
         exec mv ./temp/MMMUS.WAD ./maps
 
         puts "extractiong mods..."
-        exec mkdir -p mods
+        file mkdir mods
         exec cp downloads/Beautiful_Doom_716.pk3 ./mods
         exec cp downloads/brutalv21.11.2.pk3 ./mods
         exec sync
