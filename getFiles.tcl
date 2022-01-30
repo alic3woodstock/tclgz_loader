@@ -114,7 +114,7 @@ proc main {} {
         exec cp downloads/Beautiful_Doom_716.pk3 ./mods
         exec cp downloads/brutalv21.11.2.pk3 ./mods
         exec sync
-        exec rm -Rf temp
+        file delete force temp
 
         puts "generationg games csv..."
         genCSV
