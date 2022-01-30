@@ -38,6 +38,9 @@ proc main {} {
       if {[string first "7z" $strTemp] >=0} {
         set strTemp ""
       }
+      if {[string first "unzip" $strTemp] >=0} {
+        set strTemp ""
+      }
 
       #preserve dowloads since it's on .gitignore
       if {[string first "downloads" $strTemp] >=0} {

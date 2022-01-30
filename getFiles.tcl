@@ -42,7 +42,6 @@ proc genCSV {} {
 
 proc downloadFiles {} {
         set wget "./wget"
-        file delete -force temp
         file mkdir downloads
 
         #gzdoom
@@ -72,20 +71,24 @@ proc main {} {
     if {[string first "win" [platform::generic]] >= 0} {
     } else {
         set sevenzip "./7zzs"
-        set wget "./wget"
+	set unzip "./unzip"
         
         #downloadFiles
 
+        file delete -force temp
         file mkdir temp
 
         puts "extractiong files..."
         exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
         exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/blasphem-0.1.7.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/blasphemer-texture-pack.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/freedoom-0.12.1.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/eviternity.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/mm_allup.zip -otemp
+
+	#7zip freezes at the final file so I use unzip
+        exec -ignorestderr $unzip -o downloads/blasphem-0.1.7.zip -d temp
+        exec -ignorestderr $unzip -o downloads/blasphemer-texture-pack.zip -d temp
+        exec -ignorestderr $unzip -o downloads/freedoom-0.12.1.zip -d temp
+        exec -ignorestderr $unzip -o downloads/eviternity.zip -d temp
+        exec -ignorestderr $unzip -o downloads/mm_allup.zip -d temp
+        exec -ignorestderr $unzip -o downloads/mm2.zip -d temp
 
         set files [glob ./temp/opt/gzdoom/*]
         set lFiles [strToList $files]
@@ -108,6 +111,8 @@ proc main {} {
         file rename -force ./temp/Eviternity.wad ./maps
         file rename -force ./temp/MM.WAD ./maps
         file rename -force ./temp/MMMUS.WAD ./maps
+        file rename -force ./temp/MM2.WAD ./maps
+        file rename -force ./temp/MM2MUS.WAD ./maps
 
         puts "extractiong mods..."
         file mkdir mods
