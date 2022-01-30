@@ -21,20 +21,22 @@ proc genCSV {} {
         puts $csvGames "#games"
         close $csvGames
 
+        set csvMods [open "mods.csv" w]
+        puts $csvMods "#mods"
+        close $csvMods
+
         set csvGames [open "games.csv" a]
-        puts $csvGames "#id,name,type,mod suport,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvGames "0,Blasphemer,game,fasle,gzdoom.cfg,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
-        puts $csvGames "1,Freedoom Phase 1,game,true,gzdoom.cfg,freedoom1.wad"
-        puts $csvGames "2,Freedoom Phase 2,game,true,gzdoom.cfg,freedoom2.wad"
-        puts $csvGames "#Mods"
-        puts $csvGames "#id,name,type,file1,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvGames "3,Beaultiful Doom,mod,mods/Beautiful_Doom_716.pk3"
-        puts $csvGames "4,Brutal Doom,mod,mods/brutalv21.11.2.pk3"
-        puts $csvGames "#maps"
-        puts $csvGames "#id,name,type,mod suport,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvGames "1,Eviternity,map,true,gzdoom.cfg,freedoom2.wad,maps/Eviternity.wad"
-        puts $csvGames "1,Memento Mori,map,true,gzdoom.cfg,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
+        puts $csvGames "#id,name,tab,mod group,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
+        puts $csvGames "0,Blasphemer,game,heretic,gzdoom.cfg,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
+        puts $csvGames "1,Freedoom Phase 1,game,doom,gzdoom.cfg,freedoom1.wad"
+        puts $csvGames "2,Freedoom Phase 2,game,doom,gzdoom.cfg,freedoom2.wad"
+        puts $csvGames "3,Eviternity,map,doom,gzdoom.cfg,freedoom2.wad,maps/Eviternity.wad"
+        puts $csvGames "4,Memento Mori,map,doom,gzdoom.cfg,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
         close $csvGames
+        
+        set csvMods [open "mods.csv" a]
+        close $csvMods
+        
     }
 }
 
@@ -45,7 +47,7 @@ proc downloadFiles {} {
 
         #gzdoom
         exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom_4.7.1_amd64.deb -P downloads
-    #     exec mv gzdoom_4.7.1_amd64.deb downloads/gzdoom_4.7.1_amd64.deb
+    #     file rename -force gzdoom_4.7.1_amd64.deb downloads/gzdoom_4.7.1_amd64.deb
 
         #blasphemer
         exec -ignorestderr $wget -c https://github.com/Blasphemer/blasphemer/releases/download/v0.1.7/blasphem-0.1.7.zip -P downloads
@@ -76,45 +78,42 @@ proc main {} {
 
         file mkdir temp
 
-        puts "extractiong gzdoom..."
+        puts "extractiong files..."
         exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
         exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
-        exec sync
+        exec -ignorestderr $sevenzip x -slp downloads/blasphem-0.1.7.zip -otemp
+        exec -ignorestderr $sevenzip x -slp downloads/blasphemer-texture-pack.zip -otemp
+        exec -ignorestderr $sevenzip x -slp downloads/freedoom-0.12.1.zip -otemp
+        exec -ignorestderr $sevenzip x -slp downloads/eviternity.zip -otemp
+        exec -ignorestderr $sevenzip x -slp downloads/mm_allup.zip -otemp
+
         set files [glob ./temp/opt/gzdoom/*]
         set lFiles [strToList $files]
-        exec rm -Rf fm_banks
-        exec rm -Rf soundfonts
+        file delete -force fm_banks
+        file delete -force soundfonts
         for {set i 0} {$i < [llength $lFiles]} {incr i} {
-            exec mv [lindex $lFiles $i] ./
+            file rename -force [lindex $lFiles $i] ./
         }
 
         puts "extractiong wads..."
         file mkdir wad
-        exec -ignorestderr $sevenzip x -slp downloads/blasphem-0.1.7.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/blasphemer-texture-pack.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/freedoom-0.12.1.zip -otemp
-        exec sync
-        exec mv ./temp/blasphem-0.1.7.wad ./wad
-        exec mv ./temp/BLSMPTXT.WAD ./wad
-        exec mv ./temp/freedoom-0.12.1/freedoom1.wad ./wad
-        exec mv ./temp/freedoom-0.12.1/freedoom2.wad ./wad
+        file rename -force ./temp/blasphem-0.1.7.wad ./wad
+        file rename -force ./temp/BLSMPTXT.WAD ./wad
+        file rename -force ./temp/freedoom-0.12.1/freedoom1.wad ./wad
+        file rename -force ./temp/freedoom-0.12.1/freedoom2.wad ./wad
 
         puts "extractiong maps..."
         file mkdir maps
-        exec -ignorestderr $sevenzip x -slp downloads/eviternity.zip -otemp
-        exec -ignorestderr $sevenzip x -slp downloads/mm_allup.zip -otemp
 #         exec -ignorestderr $sevenzip x -slp downloads/mm2.zip -otemp
-        exec sync
-        exec mv ./temp/Eviternity.wad ./maps
-        exec mv ./temp/MM.WAD ./maps
-        exec mv ./temp/MMMUS.WAD ./maps
+        file rename -force ./temp/Eviternity.wad ./maps
+        file rename -force ./temp/MM.WAD ./maps
+        file rename -force ./temp/MMMUS.WAD ./maps
 
         puts "extractiong mods..."
         file mkdir mods
         exec cp downloads/Beautiful_Doom_716.pk3 ./mods
         exec cp downloads/brutalv21.11.2.pk3 ./mods
-        exec sync
-        file delete force temp
+        file delete -force temp
 
         puts "generationg games csv..."
         genCSV

@@ -44,6 +44,14 @@ proc main {} {
         set strTemp ""
       }
 
+      if {[string first "README" $strTemp] >=0} {
+        set strTemp ""
+      }
+      
+      if {[string first "LICENSE" $strTemp] >=0} {
+        set strTemp ""
+      }
+
 
       if {$strTemp != ""} {
         lappend deleteList $strTemp
