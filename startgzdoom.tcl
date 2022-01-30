@@ -42,18 +42,13 @@ proc readCSV {} {
     while { [gets $csv data] >= 0 } {
         if {[string index $data 0] != {#}} {
             set listTemp [strToList $data ","]
-
-            if {[lindex $listTemp 2] == {game}} {
+            
+            if {[lindex $listTemp 2] == "0"} {
                 set arrayGames($idxGames) $listTemp
                 incr idxGames
             }
 
-            if {[lindex $listTemp 2] == {mod}} {
-                set arrayMods($idxMods) $listTemp
-                incr idxMods
-            }
-
-            if {[lindex $listTemp 2] == {map}} {
+            if {[lindex $listTemp 2] == "1"} {
                 set arrayMaps($idxMaps) $listTemp
                 incr idxMaps
             }

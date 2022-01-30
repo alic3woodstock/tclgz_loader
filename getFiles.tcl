@@ -26,12 +26,12 @@ proc genCSV {} {
         close $csvMods
 
         set csvGames [open "games.csv" a]
-        puts $csvGames "#id,name,tab,mod group,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvGames "0,Blasphemer,game,heretic,gzdoom.cfg,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
-        puts $csvGames "1,Freedoom Phase 1,game,doom,gzdoom.cfg,freedoom1.wad"
-        puts $csvGames "2,Freedoom Phase 2,game,doom,gzdoom.cfg,freedoom2.wad"
-        puts $csvGames "3,Eviternity,map,doom,gzdoom.cfg,freedoom2.wad,maps/Eviternity.wad"
-        puts $csvGames "4,Memento Mori,map,doom,gzdoom.cfg,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
+        puts $csvGames "#id,name,tab index,mod group,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
+        puts $csvGames "0,Blasphemer,0,heretic,gzdoom.cfg,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
+        puts $csvGames "1,Freedoom Phase 1,0,doom,gzdoom.cfg,freedoom1.wad"
+        puts $csvGames "2,Freedoom Phase 2,0,doom,gzdoom.cfg,freedoom2.wad"
+        puts $csvGames "3,Eviternity,1,doom,gzdoom.cfg,freedoom2.wad,maps/Eviternity.wad"
+        puts $csvGames "4,Memento Mori,1,doom,gzdoom.cfg,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
         close $csvGames
         
         set csvMods [open "mods.csv" a]
@@ -74,7 +74,7 @@ proc main {} {
         set sevenzip "./7zzs"
         set wget "./wget"
         
-        downloadFiles
+        #downloadFiles
 
         file mkdir temp
 
