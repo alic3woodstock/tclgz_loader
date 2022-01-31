@@ -78,7 +78,74 @@ proc getSelectedIndex {vListBox} {
     return 0
 }
 
+proc execGzdoom {csvLine} {
+    set ::env(DOOMWADDIR) wad
+    set cmdStr "exec -ignorestderr ./gzdoom"
+
+    append cmdStr " -iwad [lindex $csvLine 5]"
+
+    if {[lindex $csvLine 6] != ""} {
+        append cmdStr " -file "
+        for {set i 6} {$i < [llength $csvLine]} {incr i} {
+          append cmdStr " [lindex $csvLine $i]"
+        }
+    }
+
+    append $cmdStr " &"
+
+    set tmpCommand [open "tmpCommand.tcl" w+]
+    puts $tmpCommand $cmdStr
+    close $tmpCommand
+    source tmpCommand.tcl
+
+    exit;
+}
+
+proc bindEvents {} {
+    bind . <Return> {
+        #line for test purposes
+        if {$currentList == ".lstStart"} {
+            execGzdoom "$arrayGames([getSelectedIndex .lstStart])"
+        } else {
+            execGzdoom "$arrayMaps([getSelectedIndex .lstMap])"
+        }
+    }
+
+    bind . <Escape> {
+        exit
+    }
+
+    bind . <<NotebookTabChanged>> {
+        if {[.nbMain select] == ".frmStart"} {set currentList ".lstStart"}
+        if {[.nbMain select] == ".frmMap"} {set currentList ".lstMap"}
+        $currentList selection set [getSelectedIndex $currentList]
+        focus $currentList
+    }
+
+    bind . <Up> {
+        set sIndex [getSelectedIndex $currentList]
+        $currentList selection clear 0 end
+        $currentList selection set $sIndex
+    }
+
+    bind . <Down> {
+        set sIndex [getSelectedIndex $currentList]
+        $currentList selection clear 0 end
+        $currentList selection set $sIndex
+    }
+
+    bind . <Right> {
+        .nbMain select 1
+    }
+
+    bind . <Left> {
+        .nbMain select 0
+    }
+}
+
 proc main {args} {
+    upvar arrayGames arrayGames
+    upvar arrayMaps arrayMaps
 
     #set main window attributes
     wm title . "Choose your destiny!"
@@ -96,6 +163,8 @@ proc main {args} {
     } else {
         set listSize [array size arrayMaps]
     }
+
+    bindEvents
 
     listbox .lstStart -activestyle dotbox -selectmode single -width 38 -heigh $listSize
     listbox .lstMap  -activestyle dotbox -selectmode single -width 38 -heigh $listSize
@@ -116,15 +185,7 @@ proc main {args} {
     .lstStart activate 0
     .lstStart selection set 0   
     
-    bind . <<startApp>> {
-        set currentList ".lstStart"
-    }       
-    event generate . <<startApp>>
-    
-    bind . <Return> {
-        #line for test purposes
-        puts [getSelectedIndex $currentList]
-    }
+    #bind events
 
     #move the window to the center of the screen, not working as intended I need to correct
     update

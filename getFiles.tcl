@@ -26,15 +26,18 @@ proc genCSV {} {
         close $csvMods
 
         set csvGames [open "games.csv" a]
-        puts $csvGames "#id,name,tab index,mod group,config,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvGames "0,Blasphemer,0,heretic,gzdoom.cfg,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
-        puts $csvGames "1,Freedoom Phase 1,0,doom,gzdoom.cfg,freedoom1.wad"
-        puts $csvGames "2,Freedoom Phase 2,0,doom,gzdoom.cfg,freedoom2.wad"
-        puts $csvGames "3,Eviternity,1,doom,gzdoom.cfg,freedoom2.wad,maps/Eviternity.wad"
-        puts $csvGames "4,Memento Mori,1,doom,gzdoom.cfg,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
+        puts $csvGames "#id,name,tab index,mod group,last run mod,iwad,file1,file2,file3,file4,file5,file6,file7,file8,file9"
+        puts $csvGames "0,Blasphemer,0,heretic,0,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
+        puts $csvGames "1,Freedoom Phase 1,0,doom,0,freedoom1.wad"
+        puts $csvGames "2,Freedoom Phase 2,0,doom,0,freedoom2.wad"
+        puts $csvGames "3,Eviternity,1,doom,0,freedoom2.wad,maps/Eviternity.wad"
+        puts $csvGames "4,Memento Mori,1,doom,0,freedoom2.wad,maps/MM.wad,MMMUS.WAD"
         close $csvGames
         
         set csvMods [open "mods.csv" a]
+        puts $csvMods "#id,name,mod group,file1,file2,file3,file4,file5,file6,file7,file8,file9"
+        puts $csvMods "1,Beaultiful Doom,doom,Beautiful_Doom_716.pk3"
+        puts $csvMods "2,Brutal Doom,doom,brutalv21.11.2.pk3"
         close $csvMods
         
     }
