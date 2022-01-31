@@ -114,23 +114,25 @@ proc execGzdoom {csvLine} {
 
     append cmdStr " -iwad [lindex $csvLine 5]"
 
-    if {[lindex $csvLine 6] != ""} {
-        append cmdStr " -file "
-        for {set i 6} {$i < [llength $csvLine]} {incr i} {
-          append cmdStr " [lindex $csvLine $i]"
-        }
-    }
-
     if {[.comboMods get] != "none"} {
         set arrayLine $arrayMods([.comboMods current])
-        if {[lindex $csvLine 6] == ""} {
-            append cmdStr " -file"
-        }
+        append cmdStr " -file"
 
         for {set i 3} {$i < [llength $arrayLine]} {incr i} {
             append cmdStr " mods/[lindex $arrayLine $i]"
         }
     }
+
+    if {[lindex $csvLine 6] != ""} {
+        if {[string first "-file" $cmdStr] < 0} {
+            append cmdStr " -file"
+        }
+
+        for {set i 6} {$i < [llength $csvLine]} {incr i} {
+          append cmdStr " [lindex $csvLine $i]"
+        }
+    }
+
 
     append $cmdStr " &"
 
