@@ -30,9 +30,9 @@ proc genCSV {} {
         puts $csvGames "0,Blasphemer,0,heretic,0,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
         puts $csvGames "1,Freedoom Phase 1,0,doom,0,freedoom1.wad"
         puts $csvGames "2,Freedoom Phase 2,0,doom,0,freedoom2.wad"
-        puts $csvGames "3,Eviternity,1,doom,0,freedoom2.wad,maps/Eviternity.wad"
-        puts $csvGames "4,Memento Mori,1,doom,0,freedoom2.wad,maps/MM.WAD,maps/MMMUS.WAD"
-        puts $csvGames "5,Memento Mori 2,1,doom,0,freedoom2.wad,maps/MM2.WAD,maps/MM2MUS.WAD"
+        puts $csvGames "3,Eviternity,1,doom,1,freedoom2.wad,maps/Eviternity.wad"
+        puts $csvGames "4,Memento Mori,1,doom,1,freedoom2.wad,maps/MM.WAD,maps/MMMUS.WAD"
+        puts $csvGames "5,Memento Mori 2,1,doom,1,freedoom2.wad,maps/MM2.WAD,maps/MM2MUS.WAD"
         close $csvGames
         
         set csvMods [open "mods.csv" a]

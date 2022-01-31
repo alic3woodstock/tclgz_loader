@@ -28,6 +28,18 @@ proc strToList {vStr vDelimiter} {
     return $lResult
 }
 
+proc listToStr {vList vDelimiter} {
+    set tmpStr ""
+    for {set i 0} {$i < [llength $vList]} {incr i} {
+        if {$i < [expr [llength $vList] -1 ]} {
+            append tmpStr "[lindex $vList $i],"
+        } else {
+            append tmpStr [lindex $vList $i]
+        }
+    }
+    return $tmpStr
+}
+
 proc readCSV {} {
     upvar arrayGames arrayGames
     upvar arrayMaps arrayMaps
@@ -63,6 +75,9 @@ proc readCSV {} {
     }
     close $csv
 
+    set arrayMods(0) "none"
+    incr idxMods
+
     set csv [open "mods.csv" r]
     while { [gets $csv data] >= 0 } {
         if {[string index $data 0] != {#}} {
@@ -82,13 +97,12 @@ proc listMods {csvLine} {
     set listTemp ""
     set modSet [lindex $csvLine 3]
 
+    lappend listTemp "none"
     for {set i 0} {$i < [array size arrayMods]} {incr i} {
         if {$modSet == [lindex $arrayMods($i) 2]} {
             lappend listTemp [lindex $arrayMods($i) 1]
         }
     }
-
-    lappend listTemp "none"
 
     .comboMods set ""
     .comboMods configure -state readonly
@@ -121,6 +135,8 @@ proc execGzdoom {csvLine} {
         for {set i 3} {$i < [llength $arrayLine]} {incr i} {
             append cmdStr " mods/[lindex $arrayLine $i]"
         }
+    } else {
+        set arrayLine "0"
     }
 
     if {[lindex $csvLine 6] != ""} {
@@ -135,6 +151,26 @@ proc execGzdoom {csvLine} {
 
 
     append $cmdStr " &"
+
+    set csv [open "games.csv" r]
+    set i 0
+    while { [gets $csv data] >= 0 } {
+        set tmpArray($i) $data
+        incr i
+    }
+    close $csv
+
+    set csv [open "games_new.csv" w+]
+    for {set i 0} {$i < [array size tmpArray]} {incr i} {
+        if {[strToList $tmpArray($i) ","] == $csvLine} {
+            set csvLine [lreplace $csvLine 4 4 [lindex $arrayLine 0]]
+            set tmpArray($i) [listToStr $csvLine ","]
+        }
+        puts $csv $tmpArray($i)
+    }
+    close $csv
+
+    file rename -force "games_new.csv" "games.csv"
 
     set tmpCommand [open "tmpCommand.tcl" w+]
     puts $tmpCommand $cmdStr
