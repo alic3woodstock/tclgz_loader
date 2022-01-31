@@ -8,8 +8,7 @@ package require platform
 #configure style
 ttk::style theme use awdark
 . configure -background [::ttk::style lookup TFrame -background]
-font configure TkDefaultFont -size 14
-
+font configure TkDefaultFont -family Helvetica -size 14
 global variable arrayGames
 global variable arrayMaps
 global variable arrayMods
@@ -62,10 +61,39 @@ proc readCSV {} {
     for {set i 0} {$i < [array size arrayMaps]} {incr i} {
         .lstMap insert $i [lindex $arrayMaps($i) 1]
     }
-
     close $csv
 
-#    puts $listGames
+    set csv [open "mods.csv" r]
+    while { [gets $csv data] >= 0 } {
+        if {[string index $data 0] != {#}} {
+            set arrayMods($idxMods) [strToList $data ","]
+            incr idxMods
+        }
+    }
+    close $csv
+
+    .comboMods set "none"
+    .comboMods configure -state readonly
+}
+
+proc listMods {csvLine} {
+    upvar arrayMods arrayMods
+
+    set listTemp ""
+    set modSet [lindex $csvLine 3]
+
+    for {set i 0} {$i < [array size arrayMods]} {incr i} {
+        if {$modSet == [lindex $arrayMods($i) 2]} {
+            lappend listTemp [lindex $arrayMods($i) 1]
+        }
+    }
+
+    lappend listTemp "none"
+
+    .comboMods set ""
+    .comboMods configure -state readonly
+    .comboMods configure -values $listTemp
+    .comboMods current [lindex $csvLine 4]
 }
 
 proc getSelectedIndex {vListBox} {
@@ -79,6 +107,8 @@ proc getSelectedIndex {vListBox} {
 }
 
 proc execGzdoom {csvLine} {
+    upvar arrayMods arrayMods
+
     set ::env(DOOMWADDIR) wad
     set cmdStr "exec -ignorestderr ./gzdoom"
 
@@ -88,6 +118,17 @@ proc execGzdoom {csvLine} {
         append cmdStr " -file "
         for {set i 6} {$i < [llength $csvLine]} {incr i} {
           append cmdStr " [lindex $csvLine $i]"
+        }
+    }
+
+    if {[.comboMods get] != "none"} {
+        set arrayLine $arrayMods([.comboMods current])
+        if {[lindex $csvLine 6] == ""} {
+            append cmdStr " -file"
+        }
+
+        for {set i 3} {$i < [llength $arrayLine]} {incr i} {
+            append cmdStr " mods/[lindex $arrayLine $i]"
         }
     }
 
@@ -119,20 +160,51 @@ proc bindEvents {} {
         if {[.nbMain select] == ".frmStart"} {set currentList ".lstStart"}
         if {[.nbMain select] == ".frmMap"} {set currentList ".lstMap"}
         $currentList selection set [getSelectedIndex $currentList]
+        set sIndex [getSelectedIndex $currentList]
+        if {$currentList == ".lstStart"} {
+            listMods "$arrayGames($sIndex)"
+        } else {
+            listMods "$arrayMaps($sIndex)"
+        }
+        set sIndexAnt $sIndex
         focus $currentList
     }
 
     bind . <Up> {
         set sIndex [getSelectedIndex $currentList]
-        $currentList selection clear 0 end
-        $currentList selection set $sIndex
+        event generate . <<btnRelease>>
+        focus $currentList
     }
+
 
     bind . <Down> {
         set sIndex [getSelectedIndex $currentList]
+        event generate . <<btnRelease>>
+        focus $currentList
+    }
+
+    bind . <<ListboxSelect>> {
+        if {$sIndexAnt != $sIndex} {
+            if {$currentList == ".lstStart"} {
+                listMods "$arrayGames($sIndex)"
+            } else {
+                listMods "$arrayMaps($sIndex)"
+            }
+            set sIndexAnt $sIndex
+        }
+    }
+
+    bind . <<btnRelease>> {
         $currentList selection clear 0 end
         $currentList selection set $sIndex
+        event generate . <<ListboxSelect>>
     }
+
+    bind .lstStart <ButtonRelease-1> {
+        set sIndex [$currentList curselection]
+        event generate . <<btnRelease>>
+    }
+
 
     bind . <Right> {
         .nbMain select 1
@@ -141,11 +213,21 @@ proc bindEvents {} {
     bind . <Left> {
         .nbMain select 0
     }
+
+    bind . <space> {
+        set cmbSize [llength [.comboMods cget -values]]
+        if {[expr $cmbSize - 1] > [.comboMods current]} {
+            .comboMods current [expr [.comboMods current] + 1]
+        } else {
+            .comboMods current 0
+        }
+    }
 }
 
 proc main {args} {
     upvar arrayGames arrayGames
     upvar arrayMaps arrayMaps
+    upvar arrayMods arrayMods
 
     #set main window attributes
     wm title . "Choose your destiny!"
@@ -155,7 +237,7 @@ proc main {args} {
     ttk::notebook .nbMain
     ttk::frame .frmStart
     ttk::frame .frmMap
-    ttk::frame .frmButtons
+    ttk::frame .frmCombo
 
     set listSize 1
     if {[array size arrayGames] >= [array size arrayMaps]} {
@@ -164,12 +246,17 @@ proc main {args} {
         set listSize [array size arrayMaps]
     }
 
-    bindEvents
+    font create defaultFont -family Helvetica -size 14
 
     listbox .lstStart -activestyle dotbox -selectmode single -width 38 -heigh $listSize
     listbox .lstMap  -activestyle dotbox -selectmode single -width 38 -heigh $listSize
+    ttk::label .lblMods -text "Mod set:"
+    ttk::combobox .comboMods -font defaultFont
     ttk::button .btnRun -text "OK" -command "event generate . <Return>"
     ttk::button .btnCancel -text "Cancel" -command "event generate . <Escape>"
+
+    readCSV
+    bindEvents
 
     #put all widigets at the screen
     pack .lstStart -in .frmStart
@@ -177,10 +264,11 @@ proc main {args} {
     .nbMain add .frmStart -text {Start Game}
     .nbMain add .frmMap -text {Start Map}
     pack .nbMain
+    pack .lblMods -in .frmCombo -side left -padx 4
+    pack .comboMods -in .frmCombo -padx 4 -pady 4 -side left
+    pack .frmCombo -expand 1 -fill x
     pack .btnCancel -padx 4 -pady 4 -side right
     pack .btnRun -padx 4 -pady 4 -side right
-
-    readCSV
 
     .lstStart activate 0
     .lstStart selection set 0   
