@@ -76,7 +76,7 @@ proc main {} {
         set sevenzip "./7zzs"
 	set unzip "./unzip"
         
-        #downloadFiles
+        downloadFiles
 
         file delete -force temp
         file mkdir temp
