@@ -14,7 +14,7 @@ Ubunto / Debian: <br />
 <code> sudo apt install tcl tk git wget libsdl2-2.0-0 </code> <br />
 <code> git clone https://github.com/alic3woodstock/tclgz_loader.git </code> <br />
 <code> cd tclgz_loader </code> <br />
-<code> cp /usr/bin/wget ./ </code>
+<code> cp /usr/bin/wget ./ </code> <br />
 <code> tclsh getFiles.tcl </code> <br />
 <code> wish startgzdoom </code> <br /> 
 <br />
