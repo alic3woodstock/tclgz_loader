@@ -25,7 +25,7 @@ To add a game, map or mod you need to edit the csv file. You can use LibreOffice
 if you get this error:
 "./wget: error while loading shared libraries: libnettle.so.8: cannot open shared object file: No such file or directory"
 run the fallowing commands: <br />
-<code> sudo apt install wget </code>
+<code> sudo apt install wget </code> <br />
 <code> cp /usr/bin/wget ./ </code>
 <br />
 the wget may not be compatible with all linux system that's why you can get this error. I will try replacing wget with a tcl library in the future
