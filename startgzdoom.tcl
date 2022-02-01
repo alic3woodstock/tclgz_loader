@@ -267,6 +267,25 @@ proc bindEvents {} {
     }
 }
 
+proc centerWindow {window} {
+	wm withdraw $window
+	update idletasks
+
+	set width  [winfo reqwidth  $window]
+	set height [winfo reqheight $window]
+
+	toplevel [set testWin ".__test_screen_size__[incr UID]"]
+	wm withdraw $testWin
+	wm state $testWin zoomed
+	update idletasks
+	set x [expr { ([winfo width $testWin] - $width) / 2 }]
+	set y [expr { ([winfo height $testWin] - $height) / 2 }]
+	destroy $testWin
+
+	wm geometry $window ${width}x${height}+${x}+${y}
+	wm deiconify $window
+}
+
 proc main {args} {
     upvar arrayGames arrayGames
     upvar arrayMaps arrayMaps
@@ -319,11 +338,7 @@ proc main {args} {
     #bind events
 
     #move the window to the center of the screen, not working as intended I need to correct
-    update
-    set wHeight [expr 1920 / 2 - [winfo height .] / 2]
-    set wWidth [expr 1080 / 2 - [winfo width .] / 2]
-    set wGeometry +$wHeight+$wWidth
-    wm geometry . $wGeometry
+	centerWindow .	
     focus .lstStart
 }
 
