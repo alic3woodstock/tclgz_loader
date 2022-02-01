@@ -19,4 +19,4 @@ Ubunto / Debian: <br />
 <br />
 To play again you only need to cd to the project folder and run startgzdoom.tcl (wish startgzdoom.tcl). 
 
-To add a game, map or mode you need to edit the csv file. You can use LibreOffice calc for that, you just need to remember to save as CSV. Id and name must be unique.
+To add a game, map or mod you need to edit the csv file. You can use LibreOffice calc for that, you just need to remember to save as CSV. Id and name must be unique.
