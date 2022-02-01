@@ -95,6 +95,7 @@ proc main {} {
     exec -ignorestderr $unzip -o downloads/mm_allup.zip -d temp
     exec -ignorestderr $unzip -o downloads/mm2.zip -d temp
 
+    file delete -force gzdoom
     file copy -force temp/opt/gzdoom ./
 
     puts "extractiong wads..."
