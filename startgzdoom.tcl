@@ -124,7 +124,7 @@ proc execGzdoom {csvLine} {
     upvar arrayMods arrayMods
 
     set ::env(DOOMWADDIR) wad
-    set cmdStr "exec -ignorestderr ./gzdoom"
+    set cmdStr "exec -ignorestderr ./gzdoom/gzdoom"
 
     append cmdStr " -iwad [lindex $csvLine 5]"
 

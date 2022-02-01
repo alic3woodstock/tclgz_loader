@@ -75,60 +75,54 @@ proc main {} {
     if {[string first "win" [platform::generic]] >= 0} {
     } else {
         set sevenzip "./7zzs"
-	set unzip "./unzip"
+        set unzip "./unzip"
+    }
         
-        downloadFiles
+    downloadFiles
 
-        file delete -force temp
-        file mkdir temp
+    file delete -force temp
+    file mkdir temp
 
-        puts "extractiong files..."
-        exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
-        exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
+    puts "extractiong files..."
+    exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
+    exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
 
 	#7zip freezes at the final file so I use unzip
-        exec -ignorestderr $unzip -o downloads/blasphem-0.1.7.zip -d temp
-        exec -ignorestderr $unzip -o downloads/blasphemer-texture-pack.zip -d temp
-        exec -ignorestderr $unzip -o downloads/freedoom-0.12.1.zip -d temp
-        exec -ignorestderr $unzip -o downloads/eviternity.zip -d temp
-        exec -ignorestderr $unzip -o downloads/mm_allup.zip -d temp
-        exec -ignorestderr $unzip -o downloads/mm2.zip -d temp
+    exec -ignorestderr $unzip -o downloads/blasphem-0.1.7.zip -d temp
+    exec -ignorestderr $unzip -o downloads/blasphemer-texture-pack.zip -d temp
+    exec -ignorestderr $unzip -o downloads/freedoom-0.12.1.zip -d temp
+    exec -ignorestderr $unzip -o downloads/eviternity.zip -d temp
+    exec -ignorestderr $unzip -o downloads/mm_allup.zip -d temp
+    exec -ignorestderr $unzip -o downloads/mm2.zip -d temp
 
-        set files [glob ./temp/opt/gzdoom/*]
-        set lFiles [strToList $files]
-        file delete -force fm_banks
-        file delete -force soundfonts
-        for {set i 0} {$i < [llength $lFiles]} {incr i} {
-            file rename -force [lindex $lFiles $i] ./
-        }
+    file copy -force temp/opt/gzdoom ./
 
-        puts "extractiong wads..."
-        file mkdir wad
-        file rename -force ./temp/blasphem-0.1.7.wad ./wad
-        file rename -force ./temp/BLSMPTXT.WAD ./wad
-        file rename -force ./temp/freedoom-0.12.1/freedoom1.wad ./wad
-        file rename -force ./temp/freedoom-0.12.1/freedoom2.wad ./wad
+    puts "extractiong wads..."
+    file mkdir wad
+    file rename -force ./temp/blasphem-0.1.7.wad ./wad
+    file rename -force ./temp/BLSMPTXT.WAD ./wad
+    file rename -force ./temp/freedoom-0.12.1/freedoom1.wad ./wad
+    file rename -force ./temp/freedoom-0.12.1/freedoom2.wad ./wad
 
-        puts "extractiong maps..."
-        file mkdir maps
+    puts "extractiong maps..."
+    file mkdir maps
 #         exec -ignorestderr $sevenzip x -slp downloads/mm2.zip -otemp
-        file rename -force ./temp/Eviternity.wad ./maps
-        file rename -force ./temp/MM.WAD ./maps
-        file rename -force ./temp/MMMUS.WAD ./maps
-        file rename -force ./temp/MM2.WAD ./maps
-        file rename -force ./temp/MM2MUS.WAD ./maps
+    file rename -force ./temp/Eviternity.wad ./maps
+    file rename -force ./temp/MM.WAD ./maps
+    file rename -force ./temp/MMMUS.WAD ./maps
+    file rename -force ./temp/MM2.WAD ./maps
+    file rename -force ./temp/MM2MUS.WAD ./maps
 
-        puts "extractiong mods..."
-        file mkdir mods
-        exec cp downloads/Beautiful_Doom_716.pk3 ./mods
-        exec cp downloads/brutalv21.11.2.pk3 ./mods
-        file delete -force temp
+    puts "extractiong mods..."
+    file mkdir mods
+    exec cp downloads/Beautiful_Doom_716.pk3 ./mods
+    exec cp downloads/brutalv21.11.2.pk3 ./mods
+    file delete -force temp
 
-        puts "generationg games csv..."
-        genCSV
+    puts "generationg games csv..."
+    genCSV
 
-        exit
-    }
+    exit
 }
 
 ::main
