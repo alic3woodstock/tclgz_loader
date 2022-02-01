@@ -45,12 +45,18 @@ proc genCSV {} {
 }
 
 proc downloadFiles {} {
-        set wget "./wget"
-        file mkdir downloads
+		if {[string first "win" [platform::generic]] >= 0} {
+			set wget "./wget.exe"
 
-        #gzdoom
-        exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom_4.7.1_amd64.deb -P downloads
-    #     file rename -force gzdoom_4.7.1_amd64.deb downloads/gzdoom_4.7.1_amd64.deb
+			#gzdoom
+			exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom-4-7-1-Windows-64bit.zip -P downloads
+		} else {
+			set wget "./wget"
+			
+			#gzdoom
+			exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom_4.7.1_amd64.deb -P downloads
+		}
+        file mkdir downloads
 
         #blasphemer
         exec -ignorestderr $wget -c https://github.com/Blasphemer/blasphemer/releases/download/v0.1.7/blasphem-0.1.7.zip -P downloads
@@ -72,10 +78,15 @@ proc downloadFiles {} {
 }
 
 proc main {} {
+	
     if {[string first "win" [platform::generic]] >= 0} {
+        set sevenzip "./7za.exe"
+        set unzip "./unzip.exe"
+		set windows true
     } else {
         set sevenzip "./7zzs"
         set unzip "./unzip"
+		set windows false
     }
         
     downloadFiles
@@ -84,8 +95,17 @@ proc main {} {
     file mkdir temp
 
     puts "extractiong files..."
-    exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
-    exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
+	
+	if {$windows} {
+		file mkdir gzdoom
+		exec -ignorestderr $unzip -o downloads/gzdoom-4-7-1-Windows-64bit.zip -d gzdoom
+	} else {
+		exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
+		exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
+		file delete -force gzdoom
+		file copy -force temp/opt/gzdoom ./
+	}
+
 
 	#7zip freezes at the final file so I use unzip
     exec -ignorestderr $unzip -o downloads/blasphem-0.1.7.zip -d temp
@@ -94,9 +114,6 @@ proc main {} {
     exec -ignorestderr $unzip -o downloads/eviternity.zip -d temp
     exec -ignorestderr $unzip -o downloads/mm_allup.zip -d temp
     exec -ignorestderr $unzip -o downloads/mm2.zip -d temp
-
-    file delete -force gzdoom
-    file copy -force temp/opt/gzdoom ./
 
     puts "extractiong wads..."
     file mkdir wad
@@ -116,8 +133,8 @@ proc main {} {
 
     puts "extractiong mods..."
     file mkdir mods
-    exec cp downloads/Beautiful_Doom_716.pk3 ./mods
-    exec cp downloads/brutalv21.11.2.pk3 ./mods
+    file copy -force downloads/Beautiful_Doom_716.pk3 ./mods
+    file copy -force downloads/brutalv21.11.2.pk3 ./mods
     file delete -force temp
 
     puts "generationg games csv..."
