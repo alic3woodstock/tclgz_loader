@@ -12,6 +12,7 @@ font configure TkDefaultFont -family Helvetica -size 14
 global variable arrayGames
 global variable arrayMaps
 global variable arrayMods
+global variable modId
 
 proc strToList {vStr vDelimiter} {
     append vStr $vDelimiter
@@ -93,21 +94,32 @@ proc readCSV {} {
 
 proc listMods {csvLine} {
     upvar arrayMods arrayMods
+	upvar idMods idMods
 
     set listTemp ""
     set modSet [lindex $csvLine 3]
-
+	
     lappend listTemp "none"
+	set idMods(0) 0
+	set idCombo 1
+	
     for {set i 0} {$i < [array size arrayMods]} {incr i} {
         if {$modSet == [lindex $arrayMods($i) 2]} {
             lappend listTemp [lindex $arrayMods($i) 1]
+			set idMods($idCombo) [lindex $arrayMods($i) 0]
+			incr idCombo			
         }
     }
 
     .comboMods set ""
     .comboMods configure -state readonly
     .comboMods configure -values $listTemp
-    .comboMods current [lindex $csvLine 4]
+	for {set i 0} {$i < [array size idMods]} {incr i} {
+		if {$idMods($i) == [lindex $csvLine 4]} {
+			.comboMods current $i
+		}
+	}
+	
 }
 
 proc getSelectedIndex {vListBox} {
@@ -122,6 +134,8 @@ proc getSelectedIndex {vListBox} {
 
 proc execGzdoom {csvLine} {
     upvar arrayMods arrayMods
+	upvar idMods idMods
+	
 
     set ::env(DOOMWADDIR) wad
 
@@ -134,7 +148,7 @@ proc execGzdoom {csvLine} {
     append cmdStr " -iwad [lindex $csvLine 5]"
 
     if {[.comboMods get] != "none"} {
-        set arrayLine $arrayMods([.comboMods current])
+        set arrayLine $arrayMods($idMods([.comboMods current]))
         append cmdStr " -file"
 
         for {set i 3} {$i < [llength $arrayLine]} {incr i} {
