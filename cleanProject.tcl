@@ -55,6 +55,9 @@ proc main {} {
         set strTemp ""
       }
 
+      if {[string first ".gitignore" $strTemp] >=0} {
+        set strTemp ""
+      }
 
       if {$strTemp != ""} {
         lappend deleteList $strTemp

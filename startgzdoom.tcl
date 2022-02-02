@@ -195,6 +195,7 @@ proc execGzdoom {csvLine} {
     puts $tmpCommand $cmdStr
     close $tmpCommand
     source tmpCommand.tcl
+    file delete -force tmpCommand.tcl
 
     exit;
 }
