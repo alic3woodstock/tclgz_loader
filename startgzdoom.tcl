@@ -262,6 +262,10 @@ proc bindEvents {} {
         event generate . <<btnRelease>>
     }
 
+    bind .lstMap <ButtonRelease-1> {
+        set sIndex [$currentList curselection]
+        event generate . <<btnRelease>>
+    }
 
     bind . <Right> {
         .nbMain select 1
@@ -324,8 +328,9 @@ proc main {args} {
 
     font create defaultFont -family Helvetica -size 14
 
-    listbox .lstStart -activestyle dotbox -selectmode single -width 38 -heigh $listSize
-    listbox .lstMap  -activestyle dotbox -selectmode single -width 38 -heigh $listSize
+    #width was to display "Back to Saturn X E2: Tower in the Fountain of Sparks" map name
+    listbox .lstStart -activestyle dotbox -selectmode single -width 42 -heigh $listSize
+    listbox .lstMap  -activestyle dotbox -selectmode single -width 42 -heigh $listSize
     ttk::label .lblMods -text "Mod set:"
     ttk::combobox .comboMods -font defaultFont
     ttk::button .btnRun -text "OK" -command "event generate . <Return>"
