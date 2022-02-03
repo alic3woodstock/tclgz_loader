@@ -308,7 +308,6 @@ proc centerWindow {window} {
         set yOffset 38 ; #my computer's window decoration size, may be different for others. I will try to code something later
     }
     update idletasks
-    puts [wm geometry $testWin]
     set x [expr { ([winfo width $testWin] - $width) / 2 }]
     set y [expr { ([winfo height $testWin] - $height) / 2 - $yOffset}]
     destroy $testWin

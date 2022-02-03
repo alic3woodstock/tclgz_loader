@@ -30,9 +30,9 @@ proc genCSV {} {
         puts $csvGames "0,Blasphemer,0,heretic,0,blasphem-0.1.7.wad,wad/BLSMPTXT.WAD"
         puts $csvGames "1,Freedoom Phase 1,0,doom,0,freedoom1.wad"
         puts $csvGames "2,Freedoom Phase 2,0,doom,0,freedoom2.wad"
-        puts $csvGames "3,Eviternity,1,doom,1,freedoom2.wad,maps/Eviternity.wad"
-        puts $csvGames "4,Memento Mori,1,doom,1,freedoom2.wad,maps/MM.WAD,maps/MMMUS.WAD"
-        puts $csvGames "5,Memento Mori 2,1,doom,1,freedoom2.wad,maps/MM2.WAD,maps/MM2MUS.WAD"
+        puts $csvGames "3,Eviternity,1,doom,1,freedoom2.wad,maps/eviternity.zip"
+        puts $csvGames "4,Memento Mori,1,doom,1,freedoom2.wad,maps/mm_allup.zip"
+        puts $csvGames "5,Memento Mori 2,1,doom,1,freedoom2.wad,maps/mm2.zip"
         close $csvGames
         
         set csvMods [open "mods.csv" a]
@@ -111,9 +111,6 @@ proc main {} {
     exec -ignorestderr $unzip -o downloads/blasphem-0.1.7.zip -d temp
     exec -ignorestderr $unzip -o downloads/blasphemer-texture-pack.zip -d temp
     exec -ignorestderr $unzip -o downloads/freedoom-0.12.1.zip -d temp
-    exec -ignorestderr $unzip -o downloads/eviternity.zip -d temp
-    exec -ignorestderr $unzip -o downloads/mm_allup.zip -d temp
-    exec -ignorestderr $unzip -o downloads/mm2.zip -d temp
 
     puts "extractiong wads..."
     file mkdir wad
@@ -122,16 +119,13 @@ proc main {} {
     file rename -force ./temp/freedoom-0.12.1/freedoom1.wad ./wad
     file rename -force ./temp/freedoom-0.12.1/freedoom2.wad ./wad
 
-    puts "extractiong maps..."
+    puts "copying maps..."
     file mkdir maps
-#         exec -ignorestderr $sevenzip x -slp downloads/mm2.zip -otemp
-    file rename -force ./temp/Eviternity.wad ./maps
-    file rename -force ./temp/MM.WAD ./maps
-    file rename -force ./temp/MMMUS.WAD ./maps
-    file rename -force ./temp/MM2.WAD ./maps
-    file rename -force ./temp/MM2MUS.WAD ./maps
+    file copy -force ./downloads/eviternity.zip ./maps
+    file copy -force ./downloads/mm_allup.zip ./maps
+    file copy -force ./downloads/mm2.zip ./maps
 
-    puts "extractiong mods..."
+    puts "copying mods..."
     file mkdir mods
     file copy -force downloads/Beautiful_Doom_716.pk3 ./mods
     file copy -force downloads/brutalv21.11.2.pk3 ./mods
