@@ -54,7 +54,7 @@ proc genCSV {} {
         
         set csvMods [open "mods.csv" a]
         puts $csvMods "#id,name,mod group,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvMods "1,Beaultiful Doom,doom,Beautiful_Doom_716.pk3"
+        puts $csvMods "1,Beaultiful Doom,doom,150skins.zip,Beautiful_Doom_716.pk3"
         puts $csvMods "2,Brutal Doom,doom,brutalv21.11.2.pk3"
         close $csvMods
         
@@ -81,6 +81,9 @@ proc downloadFiles {} {
 
     #freedoom
     exec -ignorestderr $wget -c https://github.com/freedoom/freedoom/releases/download/v0.12.1/freedoom-0.12.1.zip -P downloads
+
+    #150skins
+    exec -ignorestderr $wget -c https://doomshack.org/wads/150skins.zip -P downloads
 
     #beaultiful doom
     exec -ignorestderr $wget -c https://github.com/jekyllgrim/Beautiful-Doom/releases/download/7.1.6/Beautiful_Doom_716.pk3 -P downloads
@@ -177,6 +180,7 @@ proc main {} {
 
     puts "copying mods..."
     file mkdir mods
+    file copy -force downloads/150skins.zip ./mods
     file copy -force downloads/Beautiful_Doom_716.pk3 ./mods
     file copy -force downloads/brutalv21.11.2.pk3 ./mods
     file delete -force temp
