@@ -294,12 +294,24 @@ proc centerWindow {window} {
 	set height [winfo reqheight $window]
 
 	toplevel [set testWin ".__test_screen_size__[incr UID]"]
-	wm withdraw $testWin
-	wm state $testWin zoomed
-	update idletasks
-	set x [expr { ([winfo width $testWin] - $width) / 2 }]
-	set y [expr { ([winfo height $testWin] - $height) / 2 }]
-	destroy $testWin
+    wm withdraw $testWin
+	if {[string first "win" [platform::generic]] >= 0} {
+        wm state $testWin zoomed
+        set yOffset 0
+    } else {
+        set testX [winfo screenwidth $testWin]
+        set testY [winfo screenheight $testWin]
+        set testGeometry "${testX}x${testY}+0+0"
+        catch {set testGeometry [exec xrandr | grep primary | cut -f 4-4 -d " "]} ; #some distributions may not come with xrandr installed
+        wm deiconify $testWin
+        wm geometry $testWin $testGeometry
+        set yOffset 38 ; #my computer's window decoration size, may be different for others. I will try to code something later
+    }
+    update idletasks
+    puts [wm geometry $testWin]
+    set x [expr { ([winfo width $testWin] - $width) / 2 }]
+    set y [expr { ([winfo height $testWin] - $height) / 2 - $yOffset}]
+    destroy $testWin
 
 	wm geometry $window ${width}x${height}+${x}+${y}
 	wm deiconify $window
