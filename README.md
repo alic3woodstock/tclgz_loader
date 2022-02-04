@@ -11,10 +11,9 @@ Usage:
 - run startgzdoom.tcl
 
 Ubunto / Debian: <br />
-<code> sudo apt install tcl tk git wget libsdl2-2.0-0 </code> <br />
+<code> sudo apt install tcl tk git libsdl2-2.0-0 </code> <br />
 <code> git clone https://github.com/alic3woodstock/tclgz_loader.git </code> <br />
 <code> cd tclgz_loader </code> <br />
-<code> cp /usr/bin/wget ./ </code> <br />
 <code> tclsh getFiles.tcl </code> <br />
 <code> wish startgzdoom </code> <br /> 
 <br />
@@ -23,8 +22,7 @@ To play again you only need to cd to the project folder and run startgzdoom.tcl 
 To add a game, map or mod you need to edit the csv file. You can use LibreOffice calc for that, you just need to remember to save as CSV. Id and name must be unique.
 
 if you get this error:
-"./wget: error while loading shared libraries: libnettle.so.8: cannot open shared object file: No such file or directory"
-run the fallowing commands: <br />
+"./wget: error while loading shared libraries: libnettle.so.8: cannot open shared object file: No such file or directory" or similar run the fallowing commands: <br />
 <code> sudo apt install wget </code> <br />
 <code> cp /usr/bin/wget ./ </code>
 <br />
