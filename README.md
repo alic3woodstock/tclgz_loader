@@ -30,13 +30,13 @@ the wget may not be compatible with all linux system that's why you can get this
 
 This project is not finished but, for now, it's usable. I do not intend to continue for a while since I have a lot of things to do and I want some time to play doom instead of work in this launcher. 
 
-Some considerations:
-I used the Skyrim mod downloader Wabbajack as an inspiration for getting wads, mods, and maps for my application it's easier to deal with licenses than distributing the files with a release or something like that.
-I plan to make a compiled release for Windows in the future. I compiled with Freewrap for windows but fonts became blurry. 
-I plan a Linux release (with all downloaded files included) since Linux doesn't receive much attention as windows. For Windows, we have Brutalizer but nothing like that for Linux
-Editing config files is not as easy as creating profiles, but is faster once everything is configured it's just a matter of launching the application and start playing
-The program can be used entirely via keyboard. 
-Tab -> change tab
-Space -> change mod
-Arrow up/down -> choose map/game to play
-Enter -> run game.
+Some considerations:<br />
+- I used the Skyrim mod downloader Wabbajack as an inspiration for getting wads, mods, and maps for my application it's easier to deal with licenses than distributing the files with a release or something like that.<br />
+- I plan to make a compiled release for Windows in the future. I compiled with Freewrap for windows but fonts became blurry.<br /> 
+- A I plan a Linux release with all downloaded files included for near future, since Linux doesn't receive much attention as windows. For Windows, we have Brutalizer but nothing like that for Linux <br />
+- Editing config files is not as easy as creating profiles, but is faster once everything is configured it's just a matter of launching the application and start playing <br />
+- The program can be used entirely via keyboard. <br />
+-- Tab -> change tab <br />
+-- Space -> change mod <br />
+-- Arrow up/down -> choose map/game to play <br />
+-- Enter -> run game.
