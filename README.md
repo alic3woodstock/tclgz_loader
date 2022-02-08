@@ -33,7 +33,7 @@ This project is not finished but, for now, it's usable. I do not intend to conti
 Some considerations:<br />
 - I used the Skyrim mod downloader Wabbajack as an inspiration for getting wads, mods, and maps for my application it's easier to deal with licenses than distributing the files with a release or something like that.<br />
 - Despite of that I plan a Linux release with all downloaded files included for near future, since Linux doesn't receive much attention as windows. For Windows, we have Brutalizer but nothing like that for Linux <br />
-- Editing config files is not as easy as creating profiles, but is faster once everything is configured it's just a matter of launching the application and start playing <br />
+- Editing config files is not as easy as creating profiles, but is faster. Once everything is configured it's just a matter of launching the application and start playing <br />
 - The program can be used entirely via keyboard. <br />
 -- Tab -> change tab <br />
 -- Space -> change mod <br />
