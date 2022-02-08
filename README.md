@@ -39,3 +39,4 @@ Some considerations:<br />
 -- Space -> change mod <br />
 -- Arrow up/down -> choose map/game to play <br />
 -- Enter -> run game.
+- The program remembers the last mod set was used to play a game. It is writen at the moment you press Ok
