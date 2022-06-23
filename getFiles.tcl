@@ -66,12 +66,12 @@ proc downloadFiles {} {
         set wget "./wget.exe"
 
         #gzdoom
-        exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom-4-7-1-Windows-64bit.zip -P downloads
+        exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.8.0/gzdoom-4-8-0-Windows-64bit.zip -P downloads
     } else {
         set wget "./wget"
 
         #gzdoom
-        exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.7.1/gzdoom_4.7.1_amd64.deb -P downloads
+        exec -ignorestderr $wget -c https://github.com/coelckers/gzdoom/releases/download/g4.8.0/gzdoom_4.8.0_amd64.deb -P downloads
     }
     file mkdir downloads
 
@@ -134,9 +134,9 @@ proc main {} {
 	
 	if {$windows} {
 		file mkdir gzdoom
-		exec -ignorestderr $unzip -o downloads/gzdoom-4-7-1-Windows-64bit.zip -d gzdoom
+		exec -ignorestderr $unzip -o downloads/gzdoom-4-8-0-Windows-64bit.zip -d gzdoom
 	} else {
-		exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.7.1_amd64.deb -otemp
+		exec -ignorestderr $sevenzip x -slp downloads/gzdoom_4.8.0_amd64.deb -otemp
 		exec -ignorestderr $sevenzip x -slp temp/data.tar -otemp
 		file delete -force gzdoom
 		file copy -force temp/opt/gzdoom ./
