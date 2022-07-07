@@ -139,6 +139,8 @@ proc execGzdoom {csvLine} {
 
     set ::env(DOOMWADDIR) wad
 
+
+
     if {[string first "win" [platform::generic]] >= 0} {
 		set cmdStr "exec -ignorestderr ./gzdoom/gzdoom.exe"
 	} else {
@@ -149,9 +151,16 @@ proc execGzdoom {csvLine} {
 
     if {[.comboMods get] != "none"} {
         set arrayLine $arrayMods($idMods([.comboMods current]))
+
+        set fexist [file exist "[lindex $arrayLine 3]"]
+        if {$fexist} {
+            set cmdStr "exec -ignorestderr [lindex $arrayLine 3]"
+            append cmdStr " -iwad [lindex $csvLine 5]"
+        }
+
         append cmdStr " -file"
 
-        for {set i 3} {$i < [llength $arrayLine]} {incr i} {
+        for {set i 4} {$i < [llength $arrayLine]} {incr i} {
             append cmdStr " mods/[lindex $arrayLine $i]"
         }
     } else {

@@ -53,9 +53,9 @@ proc genCSV {} {
 
         
         set csvMods [open "mods.csv" a]
-        puts $csvMods "#id,name,mod group,file1,file2,file3,file4,file5,file6,file7,file8,file9"
-        puts $csvMods "1,Beaultiful Doom,doom,150skins.zip,Beautiful_Doom_716.pk3"
-        puts $csvMods "2,Brutal Doom,doom,brutalv21.11.2.pk3"
+        puts $csvMods "#id,name,mod group,custom exec,file1,file2,file3,file4,file5,file6,file7,file8,file9"
+        puts $csvMods "1,Beaultiful Doom,doom,n,150skins.zip,Beautiful_Doom_716.pk3"
+        puts $csvMods "2,Brutal Doom,doom,n,brutalv21.11.2.pk3"
         close $csvMods
         
     }
